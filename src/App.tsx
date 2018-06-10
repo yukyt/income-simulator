@@ -1,19 +1,18 @@
 import * as React from 'react';
 import './App.css';
-
-import logo from './logo.svg';
+import Deduction from './containers/Deduction';
+import WorkStyle from './containers/WorkStyle';
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">所得計算機</h1>
         </header>
-        TODO: 労働形態選択フォーム<br />
-        TODO: 収入入力フォーム<br />
-        TODO: 支出表示<br />
+        <WorkStyle />
+        TODO: 収入<br />
+        <Deduction />
         TODO: 所得表示<br />
       </div>
     );
