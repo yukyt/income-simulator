@@ -4,6 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { StyleRulesCallback, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import * as React from 'react';
+import * as CONSTANTS from 'src/define';
 
 type classNames = 'root' | 'formControl';
 
@@ -21,7 +22,7 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
 class WorkStyle extends React.Component<WithStyles<classNames>, {}> {
   public state = {
     name: '',
-    workstyle: 1,
+    workstyle: CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE,
   };
   public handleChange = (event:any) => {
     this.setState({ [event.target.name]: event.target.value });
@@ -41,9 +42,9 @@ class WorkStyle extends React.Component<WithStyles<classNames>, {}> {
                             name: 'workstyle',
                         }}
                     >
-                        <MenuItem value={1}>社員</MenuItem>
-                        <MenuItem value={2}>個人事業主</MenuItem>
-                        <MenuItem value={3}>法人成り</MenuItem>
+                      {Object.keys(CONSTANTS.WORK_STYLE).map((key, i) => (
+                        <MenuItem key={i} value={CONSTANTS.WORK_STYLE[key]}>{CONSTANTS.WORK_STYLE_NAME.get(CONSTANTS.WORK_STYLE[key])}</MenuItem>
+                      ))}
                     </Select>
                 </FormControl>
             </form>
