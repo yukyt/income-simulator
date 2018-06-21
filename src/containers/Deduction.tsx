@@ -3,6 +3,7 @@ import { StyleRulesCallback, Theme, withStyles, WithStyles } from '@material-ui/
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 type classNames = 'root' | 'textField';
 
@@ -18,7 +19,12 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
   },
 });
 
-class Deduction extends React.Component<WithStyles<classNames>, {}> {
+interface IProps {
+  totalPayment: number,
+  payrollDeduction: number,
+}
+
+class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
   public state = {
     name: '',
   };
@@ -41,10 +47,10 @@ class Deduction extends React.Component<WithStyles<classNames>, {}> {
         />
         <Paper className={classes.root} elevation={4}>
             <Typography variant="headline" component="h3">
-            給与所得控除
+            給与所得控除(暫定20%固定)
             </Typography>
             <Typography component="p">
-            0
+            {this.props.payrollDeduction}
             </Typography>
         </Paper>
         <Paper className={classes.root} elevation={4}>
@@ -76,4 +82,9 @@ class Deduction extends React.Component<WithStyles<classNames>, {}> {
   }
 };
 
-export default withStyles(styles)(Deduction);
+const mapStateToProps = (state:any) => ({
+  totalPayment: state.totalPayment,
+  payrollDeduction: state.payrollDeduction,
+});
+
+export default withStyles(styles)(connect(mapStateToProps)(Deduction));
