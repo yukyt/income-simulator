@@ -15,11 +15,24 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
 
 interface IProps {
   salary: number,
+  sales: number,
   payrollDeduction: number,
   blueReturnDeduction: number,
 }
 
 class NetPayment extends React.Component<IProps & WithStyles<classNames>, {}> {
+  public calc (salary:number, sales:number, payrollDeduction:number, blueReturnDeduction:number) {
+    console.log('calc');
+    let salaryIncome = (salary - payrollDeduction);
+    if (salaryIncome < 0) {
+      salaryIncome = 0;
+    }
+    let salesIncome = (sales - blueReturnDeduction) || 0;
+    if (salesIncome < 0) {
+      salesIncome = 0;
+    }
+    return salaryIncome + salesIncome;
+  }
   public render() {
     const { classes } = this.props;
     return (
@@ -29,7 +42,7 @@ class NetPayment extends React.Component<IProps & WithStyles<classNames>, {}> {
             年間総所得(万円)
             </Typography>
             <Typography component="p">
-            {this.props.salary - this.props.payrollDeduction - this.props.blueReturnDeduction}
+            {this.calc(this.props.salary, this.props.sales, this.props.payrollDeduction, this.props.blueReturnDeduction)}
             </Typography>
         </Paper>
       </div>
@@ -39,6 +52,7 @@ class NetPayment extends React.Component<IProps & WithStyles<classNames>, {}> {
 
 const mapStateToProps = (state:any) => ({
   salary: state.salary,
+  sales: state.sales,
   payrollDeduction: state.payrollDeduction,
   blueReturnDeduction: state.blueReturnDeduction,
 });
