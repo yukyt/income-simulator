@@ -1,10 +1,11 @@
 import 'babel-polyfill';
 import { combineReducers } from 'redux';
 import { blueReturnDeduction, payrollDeduction } from './deduction';
-import { totalPayment } from './totalPayment';
+import { salary, sales } from './revenue';
 
 export default combineReducers({
-  totalPayment,
+  salary,
+  sales,
   payrollDeduction,
   blueReturnDeduction,
 });

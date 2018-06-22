@@ -2,7 +2,7 @@ import { StyleRulesCallback, Theme, withStyles, WithStyles } from '@material-ui/
 import TextField from '@material-ui/core/TextField';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { changeTotalPayment } from '../actions/totalPayment';
+import { changeSalary } from '../actions/revenue';
 
 type classNames = 'container' | 'textField';
 
@@ -19,11 +19,11 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
 });
 
 interface IProps {
-  totalPayment: number,
+  salary: number,
   onChangeTotalPayment: (price: number) => void;
 }
 
-class TotalPayment extends React.Component<IProps & WithStyles<classNames>, {}> {
+class Salary extends React.Component<IProps & WithStyles<classNames>, {}> {
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     this.props.onChangeTotalPayment(parseInt(e.target.value, 10));
@@ -37,7 +37,7 @@ class TotalPayment extends React.Component<IProps & WithStyles<classNames>, {}> 
             id="name"
             label="年間総収入(万円)"
             className={classes.textField}
-            value={this.props.totalPayment}
+            value={this.props.salary}
             onChange={this.handleChange}
             margin="normal"
           />
@@ -48,14 +48,14 @@ class TotalPayment extends React.Component<IProps & WithStyles<classNames>, {}> 
 };
 
 const mapStateToProps = (state:any) => ({
-  totalPayment: state.totalPayment,
+  salary: state.salary,
 });
 
 const mapDispatchToProps = (dispatch:any) => ({
   onChangeTotalPayment: (price:number) => {
-    dispatch(changeTotalPayment(price));
+    dispatch(changeSalary(price));
   },
 });
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(TotalPayment));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Salary));
 

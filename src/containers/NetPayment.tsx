@@ -14,7 +14,7 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
 });
 
 interface IProps {
-  totalPayment: number,
+  salary: number,
   payrollDeduction: number,
   blueReturnDeduction: number,
 }
@@ -29,7 +29,7 @@ class NetPayment extends React.Component<IProps & WithStyles<classNames>, {}> {
             年間総所得(万円)
             </Typography>
             <Typography component="p">
-            {this.props.totalPayment - this.props.payrollDeduction - this.props.blueReturnDeduction}
+            {this.props.salary - this.props.payrollDeduction - this.props.blueReturnDeduction}
             </Typography>
         </Paper>
       </div>
@@ -38,7 +38,7 @@ class NetPayment extends React.Component<IProps & WithStyles<classNames>, {}> {
 };
 
 const mapStateToProps = (state:any) => ({
-  totalPayment: state.totalPayment,
+  salary: state.salary,
   payrollDeduction: state.payrollDeduction,
   blueReturnDeduction: state.blueReturnDeduction,
 });

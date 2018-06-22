@@ -2,7 +2,7 @@ import * as React from 'react';
 import './App.css';
 import Deduction from './containers/Deduction';
 import NetPayment from './containers/NetPayment';
-import TotalPayment from './containers/TotalPayment';
+import Salary from './containers/Revenue';
 import WorkStyle from './containers/WorkStyle';
 
 class App extends React.Component {
@@ -13,7 +13,7 @@ class App extends React.Component {
           <h1 className="App-title">所得計算機</h1>
         </header>
         <WorkStyle />
-        <TotalPayment />
+        <Salary />
         <Deduction />
         <NetPayment />
       </div>
