@@ -22,6 +22,7 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
 interface IProps {
   totalPayment: number,
   payrollDeduction: number,
+  blueReturnDeduction: number,
 }
 
 class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
@@ -74,7 +75,7 @@ class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
             青色申告控除
             </Typography>
             <Typography component="p">
-            0
+            {this.props.blueReturnDeduction}
             </Typography>
         </Paper>
       </div>
@@ -85,6 +86,7 @@ class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
 const mapStateToProps = (state:any) => ({
   totalPayment: state.totalPayment,
   payrollDeduction: state.payrollDeduction,
+  blueReturnDeduction: state.blueReturnDeduction,
 });
 
 export default withStyles(styles)(connect(mapStateToProps)(Deduction));
