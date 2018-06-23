@@ -4,7 +4,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { StyleRulesCallback, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as CONSTANTS from 'src/define';
+import { changeWorkStyle } from '../actions/workStyle';
 
 type classNames = 'root' | 'formControl';
 
@@ -19,13 +21,14 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
     },
 });
 
-class WorkStyle extends React.Component<WithStyles<classNames>, {}> {
-  public state = {
-    name: '',
-    workstyle: CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE,
-  };
-  public handleChange = (event:any) => {
-    this.setState({ [event.target.name]: event.target.value });
+interface IProps {
+  workStyle: number,
+  onChangeWorkStyle: (workStyle: number) => void;
+}
+
+class WorkStyle extends React.Component<IProps & WithStyles<classNames>, {}> {
+  public handleChange = (e:React.ChangeEvent<HTMLSelectElement>)  => {
+    this.props.onChangeWorkStyle(parseInt(e.target.value, 10));
   };
   public render() {
     const { classes } = this.props;
@@ -35,16 +38,16 @@ class WorkStyle extends React.Component<WithStyles<classNames>, {}> {
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="workstyle-id">労働形態</InputLabel>
                     <Select
-                        value={this.state.workstyle}
+                        value={this.props.workStyle}
                         onChange={this.handleChange}
                         inputProps={{
                             id: 'workstyle-id',
                             name: 'workstyle',
                         }}
                     >
-                      {Object.keys(CONSTANTS.WORK_STYLE).map((key, i) => (
+                        {Object.keys(CONSTANTS.WORK_STYLE).map((key, i) => (
                         <MenuItem key={i} value={CONSTANTS.WORK_STYLE[key]}>{CONSTANTS.WORK_STYLE_NAME.get(CONSTANTS.WORK_STYLE[key])}</MenuItem>
-                      ))}
+                        ))}
                     </Select>
                 </FormControl>
             </form>
@@ -53,4 +56,16 @@ class WorkStyle extends React.Component<WithStyles<classNames>, {}> {
   }
 };
 
-export default withStyles(styles)(WorkStyle);
+
+const mapStateToProps = (state:any) => ({
+  workStyle: state.workStyle,
+});
+
+const mapDispatchToProps = (dispatch:any) => ({
+  onChangeWorkStyle: (workStyle:number) => {
+    dispatch(changeWorkStyle(workStyle));
+  },
+});
+    
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(WorkStyle));
+  

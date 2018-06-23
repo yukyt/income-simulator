@@ -25,7 +25,6 @@ interface IProps {
 
 class Salary extends React.Component<IProps & WithStyles<classNames>, {}> {
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     this.props.onChangeSalary(parseInt(e.target.value, 10));
   };
   public render() {
