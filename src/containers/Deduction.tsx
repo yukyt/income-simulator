@@ -4,10 +4,16 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { changeExpense } from '../actions/deduction';
+import * as CONSTANTS from '../define';
 
-type classNames = 'root' | 'textField';
+type classNames = 'container' | 'root' | 'textField';
 
 const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
   root: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -21,39 +27,68 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
 
 interface IProps {
   salary: number,
+  sales: number,
+  expense: number,
+  workStyle: number,
   payrollDeduction: number,
   blueReturnDeduction: number,
+  onChangeExpense: (price: number) => void,
 }
 
 class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
   public state = {
     name: '',
   };
-  public handleChange = (name:string) => (event:any) => {
-    this.setState({
-      [name]: event.target.value,
-    });
+  public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    this.props.onChangeExpense(parseInt(e.target.value, 10));
   };
   public render() {
     const { classes } = this.props;
     return (
       <div>
-        <TextField
-          id="name"
-          label="年間経費(万円)"
-          className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
-          margin="normal"
-        />
-        <Paper className={classes.root} elevation={4}>
-            <Typography variant="headline" component="h3">
-            給与所得控除(暫定20%固定)
-            </Typography>
-            <Typography component="p">
-            {this.props.payrollDeduction}
-            </Typography>
-        </Paper>
+        <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE ? '' : 'none' }}>
+          <form className={classes.container} noValidate={true} autoComplete="off">
+            <TextField
+              id="name"
+              label="年間経費"
+              className={classes.textField}
+              value={this.props.expense}
+              onChange={this.handleChange}
+              margin="normal"
+            />
+          </form>
+        </div>
+        <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE ? '' : 'none' }}>
+          <Paper className={classes.root} elevation={4}>
+              <Typography variant="headline" component="h3">
+              事業所得
+              </Typography>
+              <Typography component="p">
+              {this.props.sales - this.props.expense}
+              </Typography>
+          </Paper>
+        </div>
+        <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.SELF_EMPLOYEE ? '' : 'none' }}>
+          <Paper className={classes.root} elevation={4}>
+              <Typography variant="headline" component="h3">
+              給与所得控除
+              </Typography>
+              <Typography component="p">
+              {this.props.payrollDeduction}
+              </Typography>
+          </Paper>
+        </div>
+        <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.SELF_EMPLOYEE ? '' : 'none' }}>
+          <Paper className={classes.root} elevation={4}>
+              <Typography variant="headline" component="h3">
+              給与所得
+              </Typography>
+              <Typography component="p">
+              {this.props.salary - this.props.payrollDeduction}
+              </Typography>
+          </Paper>
+        </div>
+
         <Paper className={classes.root} elevation={4}>
             <Typography variant="headline" component="h3">
             年金
@@ -70,14 +105,16 @@ class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
             0
             </Typography>
         </Paper>
-        <Paper className={classes.root} elevation={4}>
-            <Typography variant="headline" component="h3">
-            青色申告控除
-            </Typography>
-            <Typography component="p">
-            {this.props.blueReturnDeduction}
-            </Typography>
-        </Paper>
+        <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE ? '' : 'none' }}>
+          <Paper className={classes.root} elevation={4}>
+              <Typography variant="headline" component="h3">
+              青色申告控除
+              </Typography>
+              <Typography component="p">
+              {this.props.blueReturnDeduction}
+              </Typography>
+          </Paper>
+        </div>
       </div>
     );
   }
@@ -85,8 +122,17 @@ class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
 
 const mapStateToProps = (state:any) => ({
   salary: state.salary,
+  sales: state.sales,
+  expense: state.expense,
+  workStyle: state.workStyle,
   payrollDeduction: state.payrollDeduction,
   blueReturnDeduction: state.blueReturnDeduction,
 });
 
-export default withStyles(styles)(connect(mapStateToProps)(Deduction));
+const mapDispatchToProps = (dispatch:any) => ({
+  onChangeExpense: (price:number) => {
+    dispatch(changeExpense(price));
+  },
+});
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Deduction));

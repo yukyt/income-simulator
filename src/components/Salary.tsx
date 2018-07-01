@@ -34,7 +34,7 @@ class Salary extends React.Component<IProps & WithStyles<classNames>, {}> {
         <form className={classes.container} noValidate={true} autoComplete="off">
           <TextField
             id="name"
-            label="年間総支給額(万円)"
+            label="年間総支給額(円)"
             className={classes.textField}
             value={this.props.salary}
             onChange={this.handleChange}

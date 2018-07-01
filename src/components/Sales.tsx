@@ -34,7 +34,7 @@ class Sales extends React.Component<IProps & WithStyles<classNames>, {}> {
         <form className={classes.container} noValidate={true} autoComplete="off">
           <TextField
             id="name"
-            label="事業収入(万円)"
+            label="事業収入"
             className={classes.textField}
             value={this.props.sales}
             onChange={this.handleChange}
