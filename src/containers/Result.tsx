@@ -44,6 +44,37 @@ const getPension = (workStyle: number, salary: number): number => {
   return Math.floor(pension);
 }
 
+const getInsuranceFee = (workStyle: number, salary: number, sales: number, expense: number): number => {
+  if (workStyle === CONSTANTS.WORK_STYLE.SELF_EMPLOYEE) {
+    // 医療分保険料
+    let medicalInsuranceFee = ((sales - expense) * 0.0692) + 31880;
+    if (medicalInsuranceFee > 540000) {
+      medicalInsuranceFee = 540000;
+    }
+    // 後期高齢者支援金等分保険料
+    let elderInsuranceFee = ((sales - expense) * 0.024) + 11072;
+    if (elderInsuranceFee > 190000) {
+      elderInsuranceFee = 190000;
+    }
+    // TODO 介護納付金分保険料は一旦除外
+    return Math.floor(medicalInsuranceFee + medicalInsuranceFee);
+  }
+
+  // 社会保険(厚生年金を除く)
+  // 健康保険料
+  // とりあえず東京固定
+  let healthInsuranceFee = salary * 0.0445;
+  if (healthInsuranceFee > 825660) {
+    healthInsuranceFee = 825660;
+  }
+  // TODO 介護保険料は一旦除外
+  // 雇用保険料
+  const employeeEnsuranceFee = salary * 0.003;
+  // 労災保険料 会社負担のみなので除く
+  return Math.floor(healthInsuranceFee + employeeEnsuranceFee);
+}
+
+
 // 最終的な所得
 const income = (workStyle: number, salary:number, sales:number, payrollDeduction:number, blueReturnDeduction:number, expense:number): number => {
   let salaryIncome = (salary - payrollDeduction);
@@ -55,7 +86,7 @@ const income = (workStyle: number, salary:number, sales:number, payrollDeduction
     salesIncome = 0;
   }
   // ここはマイナスになってもok
-  return salaryIncome + salesIncome - getPension(workStyle, salary);
+  return salaryIncome + salesIncome - getPension(workStyle, salary) - getInsuranceFee(workStyle, salary, sales, expense);
 }
 
 
@@ -149,7 +180,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
             保険
             </Typography>
             <Typography component="p">
-            0
+            { getInsuranceFee(this.props.workStyle, this.props.salary, this.props.sales, this.props.expense) }
             </Typography>
         </Paper>
         <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE ? '' : 'none' }}>
