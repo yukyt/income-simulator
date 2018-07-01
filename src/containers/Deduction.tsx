@@ -25,6 +25,25 @@ const styles: StyleRulesCallback<classNames>  = (theme: Theme) => ({
   },
 });
 
+// 年金計算
+const getPension = (workStyle: number, salary: number): number => {
+  if (workStyle === CONSTANTS.WORK_STYLE.SELF_EMPLOYEE) {
+    // 国民年金
+    // TODO: とりあえず２年前納の割引前提
+    return 188675;
+  }
+  // 厚生年金(自己負担分)
+  const pension = salary * 0.0915;
+  if (pension < 8052 * 12) {
+    return 8052 * 12;
+  }
+  if (pension > 56730 * 12) {
+    return 56730
+  }
+  // TODO: とりあえず等級は考慮しない
+  return Math.floor(pension);
+}
+
 interface IProps {
   salary: number,
   sales: number,
@@ -32,6 +51,7 @@ interface IProps {
   workStyle: number,
   payrollDeduction: number,
   blueReturnDeduction: number,
+  pention: number,
   onChangeExpense: (price: number) => void,
 }
 
@@ -89,17 +109,29 @@ class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
           </Paper>
         </div>
 
+        <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE ? '' : 'none' }}>
+          <Paper className={classes.root} elevation={4}>
+              <Typography variant="headline" component="h3">
+              個人事業税
+              </Typography>
+              <Typography component="p">
+              0（とりあえず）
+              </Typography>
+          </Paper>
+        </div>
         <Paper className={classes.root} elevation={4}>
             <Typography variant="headline" component="h3">
-            年金
+              { this.props.workStyle === CONSTANTS.WORK_STYLE.SELF_EMPLOYEE ? '国民' : '厚生' }
+              年金
             </Typography>
             <Typography component="p">
-            0
+              { getPension(this.props.workStyle, this.props.salary) }
             </Typography>
         </Paper>
         <Paper className={classes.root} elevation={4}>
             <Typography variant="headline" component="h3">
-            保険料
+            { this.props.workStyle === CONSTANTS.WORK_STYLE.SELF_EMPLOYEE ? '国民健康' : '社会' }
+            保険
             </Typography>
             <Typography component="p">
             0
@@ -127,6 +159,7 @@ const mapStateToProps = (state:any) => ({
   workStyle: state.workStyle,
   payrollDeduction: state.payrollDeduction,
   blueReturnDeduction: state.blueReturnDeduction,
+  pention: state.pention,
 });
 
 const mapDispatchToProps = (dispatch:any) => ({
