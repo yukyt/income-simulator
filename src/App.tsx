@@ -1,7 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import Deduction from './containers/Deduction';
-import NetPayment from './containers/NetPayment';
+import Result from './containers/Result';
 import Revenue from './containers/Revenue';
 import WorkStyle from './containers/WorkStyle';
 
@@ -14,8 +13,7 @@ class App extends React.Component {
         </header>
         <WorkStyle />
         <Revenue />
-        <Deduction />
-        <NetPayment />
+        <Result />
       </div>
     );
   }

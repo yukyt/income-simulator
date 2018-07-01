@@ -44,6 +44,21 @@ const getPension = (workStyle: number, salary: number): number => {
   return Math.floor(pension);
 }
 
+// 最終的な所得
+const income = (workStyle: number, salary:number, sales:number, payrollDeduction:number, blueReturnDeduction:number, expense:number): number => {
+  let salaryIncome = (salary - payrollDeduction);
+  if (salaryIncome < 0) {
+    salaryIncome = 0;
+  }
+  let salesIncome = (sales - blueReturnDeduction - expense) || 0;
+  if (salesIncome < 0) {
+    salesIncome = 0;
+  }
+  // ここはマイナスになってもok
+  return salaryIncome + salesIncome - getPension(workStyle, salary);
+}
+
+
 interface IProps {
   salary: number,
   sales: number,
@@ -55,7 +70,7 @@ interface IProps {
   onChangeExpense: (price: number) => void,
 }
 
-class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
+class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
   public state = {
     name: '',
   };
@@ -147,6 +162,23 @@ class Deduction extends React.Component<IProps & WithStyles<classNames>, {}> {
               </Typography>
           </Paper>
         </div>
+        <div>
+          <Paper className={classes.root} elevation={4}>
+              <Typography variant="headline" component="h3">
+              年間総所得
+              </Typography>
+              <Typography component="p">
+              {income(
+                this.props.workStyle,
+                this.props.salary,
+                this.props.sales,
+                this.props.payrollDeduction,
+                this.props.blueReturnDeduction,
+                this.props.expense
+              )}
+              </Typography>
+          </Paper>
+        </div>
       </div>
     );
   }
@@ -168,4 +200,4 @@ const mapDispatchToProps = (dispatch:any) => ({
   },
 });
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Deduction));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Result));
