@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "所得計算機",
+  "name": "社員/フリーランス所得比較",
   "icons": [
     {
       "src": "favicon.ico",
