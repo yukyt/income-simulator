@@ -31,10 +31,13 @@ export const payrollDeduction = (state:number = 0, action:{type:string | null, p
 };
 
 // 青色申告控除
-export const blueReturnDeduction = (state:number = 65, action:{type:string | null, price:number}) => {
+export const blueReturnDeduction = (state:number = 0, action:{type:string | null, price:number}) => {
   switch (action.type) {
     case 'CHANGE_SALES':
-      return state;
+      if (action.price <= 650000) {
+        return action.price;
+      }
+      return 650000;
     default:
       return state;
   }
