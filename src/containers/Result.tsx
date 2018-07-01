@@ -38,7 +38,7 @@ const getPension = (workStyle: number, salary: number): number => {
     return 8052 * 12;
   }
   if (pension > 56730 * 12) {
-    return 56730
+    return 56730 * 12
   }
   // TODO: とりあえず等級は考慮しない
   return Math.floor(pension);
