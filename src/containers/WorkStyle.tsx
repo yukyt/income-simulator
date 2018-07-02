@@ -6,6 +6,8 @@ import { StyleRulesCallback, Theme, withStyles, WithStyles } from '@material-ui/
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as CONSTANTS from 'src/define';
+import { changeExpense } from '../actions/deduction';
+import { changeSalary, changeSales } from '../actions/revenue';
 import { changeWorkStyle } from '../actions/workStyle';
 
 type classNames = 'root' | 'formControl';
@@ -64,6 +66,13 @@ const mapStateToProps = (state:any) => ({
 const mapDispatchToProps = (dispatch:any) => ({
   onChangeWorkStyle: (workStyle:number) => {
     dispatch(changeWorkStyle(workStyle));
+    if (workStyle === CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE) {
+        dispatch(changeSales(0));
+        dispatch(changeExpense(0));
+    }
+    if (workStyle === CONSTANTS.WORK_STYLE.SELF_EMPLOYEE) {
+        dispatch(changeSalary(0));
+    }
   },
 });
     
