@@ -24,8 +24,12 @@ interface IProps {
 }
 
 class Salary extends React.Component<IProps & WithStyles<classNames>, {}> {
+  public numberFormat = (price:number) => {
+    const formatter = new Intl.NumberFormat('ja-JP');
+    return formatter.format(price);
+  };
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    this.props.onChangeSalary(parseInt(e.target.value, 10));
+    this.props.onChangeSalary(Number(e.target.value.replace(/,/g, '')));
   };
   public render() {
     const { classes } = this.props;
@@ -36,7 +40,7 @@ class Salary extends React.Component<IProps & WithStyles<classNames>, {}> {
             id="name"
             label="年間総支給額(円)"
             className={classes.textField}
-            value={this.props.salary}
+            value={this.numberFormat(this.props.salary)}
             onChange={this.handleChange}
             margin="normal"
           />

@@ -76,7 +76,7 @@ const getInsuranceFee = (workStyle: number, salary: number, sales: number, expen
 
 
 // 最終的な所得
-const income = (workStyle: number, salary:number, sales:number, payrollDeduction:number, blueReturnDeduction:number, expense:number): number => {
+const getIncome = (workStyle: number, salary:number, sales:number, payrollDeduction:number, blueReturnDeduction:number, expense:number): number => {
   let salaryIncome = (salary - payrollDeduction);
   if (salaryIncome < 0) {
     salaryIncome = 0;
@@ -102,11 +102,12 @@ interface IProps {
 }
 
 class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
-  public state = {
-    name: '',
+  public numberFormat = (price:number) => {
+    const formatter = new Intl.NumberFormat('ja-JP');
+    return formatter.format(price);
   };
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    this.props.onChangeExpense(parseInt(e.target.value, 10));
+    this.props.onChangeExpense(Number(e.target.value.replace(/,/g, '')));
   };
   public render() {
     const { classes } = this.props;
@@ -118,7 +119,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               id="name"
               label="年間経費"
               className={classes.textField}
-              value={this.props.expense}
+              value={this.numberFormat(this.props.expense)}
               onChange={this.handleChange}
               margin="normal"
             />
@@ -130,7 +131,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               事業所得
               </Typography>
               <Typography component="p">
-              {this.props.sales - this.props.expense}
+              {this.numberFormat(this.props.sales - this.props.expense)}
               </Typography>
           </Paper>
         </div>
@@ -140,7 +141,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               給与所得控除
               </Typography>
               <Typography component="p">
-              {this.props.payrollDeduction}
+              {this.numberFormat(this.props.payrollDeduction)}
               </Typography>
           </Paper>
         </div>
@@ -150,7 +151,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               給与所得
               </Typography>
               <Typography component="p">
-              {this.props.salary - this.props.payrollDeduction}
+              {this.numberFormat(this.props.salary - this.props.payrollDeduction)}
               </Typography>
           </Paper>
         </div>
@@ -171,7 +172,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               年金
             </Typography>
             <Typography component="p">
-              { getPension(this.props.workStyle, this.props.salary) }
+              { this.numberFormat(getPension(this.props.workStyle, this.props.salary)) }
             </Typography>
         </Paper>
         <Paper className={classes.root} elevation={4}>
@@ -180,7 +181,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
             保険
             </Typography>
             <Typography component="p">
-            { getInsuranceFee(this.props.workStyle, this.props.salary, this.props.sales, this.props.expense) }
+            { this.numberFormat(getInsuranceFee(this.props.workStyle, this.props.salary, this.props.sales, this.props.expense)) }
             </Typography>
         </Paper>
         <div style={{ display: this.props.workStyle !== CONSTANTS.WORK_STYLE.REGULAR_EMPLOYEE ? '' : 'none' }}>
@@ -189,7 +190,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               青色申告控除
               </Typography>
               <Typography component="p">
-              {this.props.blueReturnDeduction}
+              {this.numberFormat(this.props.blueReturnDeduction)}
               </Typography>
           </Paper>
         </div>
@@ -199,14 +200,14 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               年間総所得
               </Typography>
               <Typography component="p">
-              {income(
+              {this.numberFormat(getIncome(
                 this.props.workStyle,
                 this.props.salary,
                 this.props.sales,
                 this.props.payrollDeduction,
                 this.props.blueReturnDeduction,
                 this.props.expense
-              )}
+              ))}
               </Typography>
           </Paper>
         </div>

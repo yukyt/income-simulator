@@ -24,8 +24,12 @@ interface IProps {
 }
 
 class Sales extends React.Component<IProps & WithStyles<classNames>, {}> {
+  public numberFormat = (price:number) => {
+    const formatter = new Intl.NumberFormat('ja-JP');
+    return formatter.format(price);
+  };
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    this.props.onChangeSales(parseInt(e.target.value, 10));
+    this.props.onChangeSales(Number(e.target.value.replace(/,/g, '')));
   };
   public render() {
     const { classes } = this.props;
@@ -36,10 +40,10 @@ class Sales extends React.Component<IProps & WithStyles<classNames>, {}> {
             id="name"
             label="事業収入"
             className={classes.textField}
-            value={this.props.sales}
+            value={this.numberFormat(this.props.sales)}
             onChange={this.handleChange}
             margin="normal"
-          />
+        />
         </form>
       </div>
     );
