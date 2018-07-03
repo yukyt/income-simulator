@@ -122,6 +122,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               value={this.numberFormat(this.props.expense)}
               onChange={this.handleChange}
               margin="normal"
+              type="number"
             />
           </form>
         </div>

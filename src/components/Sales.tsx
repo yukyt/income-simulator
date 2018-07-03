@@ -43,6 +43,7 @@ class Sales extends React.Component<IProps & WithStyles<classNames>, {}> {
             value={this.numberFormat(this.props.sales)}
             onChange={this.handleChange}
             margin="normal"
+            type="number"
         />
         </form>
       </div>
