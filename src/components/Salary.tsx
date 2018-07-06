@@ -29,7 +29,7 @@ class Salary extends React.Component<IProps & WithStyles<classNames>, {}> {
     return formatter.format(price);
   };
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    this.props.onChangeSalary(Number(e.target.value.replace(/,/g, '')));
+    this.props.onChangeSalary(Number(e.target.value.replace(/[^0-9]/g, '')));
   };
   public render() {
     const { classes } = this.props;
@@ -43,7 +43,6 @@ class Salary extends React.Component<IProps & WithStyles<classNames>, {}> {
             value={this.numberFormat(this.props.salary)}
             onChange={this.handleChange}
             margin="normal"
-            type="number"
           />
         </form>
       </div>

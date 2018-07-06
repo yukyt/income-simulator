@@ -29,7 +29,7 @@ class Sales extends React.Component<IProps & WithStyles<classNames>, {}> {
     return formatter.format(price);
   };
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    this.props.onChangeSales(Number(e.target.value.replace(/,/g, '')));
+    this.props.onChangeSales(Number(e.target.value.replace(/[^0-9]/g, '')));
   };
   public render() {
     const { classes } = this.props;
@@ -43,7 +43,6 @@ class Sales extends React.Component<IProps & WithStyles<classNames>, {}> {
             value={this.numberFormat(this.props.sales)}
             onChange={this.handleChange}
             margin="normal"
-            type="number"
         />
         </form>
       </div>

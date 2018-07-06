@@ -107,7 +107,7 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
     return formatter.format(price);
   };
   public handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    this.props.onChangeExpense(Number(e.target.value.replace(/,/g, '')));
+    this.props.onChangeExpense(Number(e.target.value.replace(/[^0-9]/g, '')));
   };
   public render() {
     const { classes } = this.props;
@@ -122,7 +122,6 @@ class Result extends React.Component<IProps & WithStyles<classNames>, {}> {
               value={this.numberFormat(this.props.expense)}
               onChange={this.handleChange}
               margin="normal"
-              type="number"
             />
           </form>
         </div>
